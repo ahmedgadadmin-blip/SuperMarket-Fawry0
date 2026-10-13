@@ -1,4 +1,4 @@
-name: Build SuperMarket Fawry APK
+ةname: Build SuperMarket Fawry APK
 
 on:
   workflow_dispatch:
