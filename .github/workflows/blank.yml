@@ -1,9 +1,7 @@
-name: Build APK
+name: Build SuperMarket Fawry APK
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
@@ -13,10 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -24,12 +21,21 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
 
-      - name: Build Android APK
-        run: gradle assembleDebug
+      - name: Extract project
+        run: |
+          unzip -q SuperMarket_Fawry_Full_Project.zip -d extracted
+
+      - name: Build APK
+        run: |
+          cd extracted/SuperMarket_Fawry_Full
+          gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: SuperMarket-Fawry-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: extracted/SuperMarket_Fawry_Full/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
